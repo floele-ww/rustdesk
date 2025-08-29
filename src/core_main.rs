@@ -402,6 +402,9 @@ pub fn core_main() -> Option<Vec<String>> {
         } else if args[0] == "--get-id" {
             println!("{}", crate::ipc::get_id());
             return None;
+        } else if args[0] == "--get-password" {
+            println!("{}", crate::ipc::get_password());
+            return None;
         } else if args[0] == "--set-id" {
             if args.len() == 2 {
                 if crate::platform::is_installed() && is_root() {
