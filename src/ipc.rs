@@ -1063,7 +1063,19 @@ pub fn clear_trusted_devices() {
 }
 
 pub fn get_id() -> String {
-    Config::get_id()
+    if let Ok(Some(v)) = get_config("id") {
+        // update salt also, so that next time reinstallation not causing first-time auto-login failure
+        if let Ok(Some(v2)) = get_config("salt") {
+            Config::set_salt(&v2);
+        }
+        if v != Config::get_id() {
+            Config::set_key_confirmed(false);
+            Config::set_id(&v);
+        }
+        v
+    } else {
+        Config::get_id()
+    }
 }
 
 pub async fn get_rendezvous_server(ms_timeout: u64) -> (String, Vec<String>) {
